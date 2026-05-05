@@ -36,55 +36,55 @@ const TaskList = ({
     );
   }
 
-  //   const sortedTasks = [...tasks].sort((a, b) => {
-  //   // Default sort by latest created
-  //   if (sortField === 'createdAt') {
-  //     return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
-  //   }
+    const sortedTasks = [...tasks].sort((a, b) => {
+    // Default sort by latest created
+    if (sortField === 'createdAt') {
+      return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+    }
 
-  //   let result = 0;
+    let result = 0;
 
-  //   switch (sortField) {
-  //     case 'dueDate': {
-  //       if (!a.dueDate && !b.dueDate) {
-  //         result = 0;
-  //       } else if (!a.dueDate) {
-  //         result = 1;
-  //       } else if (!b.dueDate) {
-  //         result = -1;
-  //       } else {
-  //         result = new Date(a.dueDate) - new Date(b.dueDate);
-  //       }
-  //       break;
-  //     }
+    switch (sortField) {
+      case 'dueDate': {
+        if (!a.dueDate && !b.dueDate) {
+          result = 0;
+        } else if (!a.dueDate) {
+          result = 1;
+        } else if (!b.dueDate) {
+          result = -1;
+        } else {
+          result = new Date(a.dueDate) - new Date(b.dueDate);
+        }
+        break;
+      }
 
-  //     case 'priority': {
-  //       const priorityScore = { Critical: 4, High: 3, Medium: 2, Low: 1 };
-  //       result =
-  //         (priorityScore[b.priority] || 0) -
-  //         (priorityScore[a.priority] || 0);
-  //       break;
-  //     }
+      case 'priority': {
+        const priorityScore = { Critical: 4, High: 3, Medium: 2, Low: 1 };
+        result =
+          (priorityScore[b.priority] || 0) -
+          (priorityScore[a.priority] || 0);
+        break;
+      }
 
-  //     case 'title':
-  //       result = a.title?.localeCompare(b.title) || 0;
-  //       break;
+      case 'title':
+        result = a.title?.localeCompare(b.title) || 0;
+        break;
 
-  //     default:
-  //       result = 0;
-  //   }
+      default:
+        result = 0;
+    }
 
-  //   // fallback → latest created first
-  //   if (result === 0) {
-  //     return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
-  //   }
+    // fallback → latest created first
+    if (result === 0) {
+      return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+    }
 
-  //   return result;
-  // });
+    return result;
+  });
 
-  const sortedTasks = [...tasks].sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-  );
+  // const sortedTasks = [...tasks].sort(
+  //   (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  // );
 
   return (
     <div className="task-list">
@@ -92,12 +92,12 @@ const TaskList = ({
         <h2>Tasks ({tasks.length})</h2>
         {/* TODO: Add sorting options */}
         <div className="sort-options">
-          {/* <select>
+          <select value={sortField} onChange={(e) => setSortField(e.target.value)}>
             <option value="createdAt">Sort by Created Date</option>
             <option value="dueDate">Sort by Due Date</option>
             <option value="priority">Sort by Priority</option>
             <option value="title">Sort by Title</option>
-          </select> */}
+          </select>
         </div>
       </div>
 
