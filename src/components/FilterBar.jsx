@@ -1,7 +1,7 @@
 // Filter Bar Component
 // TODO: Implement advanced filtering controls
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { TASK_TYPES, PRIORITIES, STATUSES } from '../api/mockApi';
 
 const FilterBar = ({ 
@@ -10,8 +10,7 @@ const FilterBar = ({
   users = [], 
   onFiltersChange 
 }) => {
-
-  // TODO: Implement filter functionality
+   // TODO: Implement filter functionality
   // Requirements:
   // 1. Project filter dropdown
   // 2. Assignee filter dropdown  
@@ -20,10 +19,23 @@ const FilterBar = ({
   // 5. Search input with debouncing
   // 6. Clear all filters button
   // 7. Show active filter count
+  const [searchInput, setSearchInput] = useState(filters.search || '');
 
-  const [searchInput, setSearchInput] = React.useState(filters.search || '');
+// TODO: Implement debounced search with useEffect and setTimeout
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (filters.search !== searchInput) {
+        onFiltersChange({
+          ...filters,
+          search: searchInput
+        });
+      }
+    }, 500); 
 
-  // TODO: Implement debounced search with useEffect and setTimeout
+    return () => clearTimeout(handler);
+  }, [searchInput, filters, onFiltersChange]);
+
+  
 
   const handleFilterChange = (filterKey, value) => {
     onFiltersChange({
@@ -43,7 +55,13 @@ const FilterBar = ({
     });
   };
 
-  // TODO: Count active filters for display
+  const activeFiltersCount = [
+    filters.projectId ? 1 : 0,
+    filters.assigneeId ? 1 : 0,
+    filters.status !== 'all' ? 1 : 0,
+    filters.taskType !== 'all' ? 1 : 0,
+    filters.search ? 1 : 0
+  ].reduce((a, b) => a + b, 0);
 
   return (
     <div className="filter-bar">
@@ -128,10 +146,9 @@ const FilterBar = ({
           <button 
             onClick={clearAllFilters}
             className="clear-filters-btn"
-            // TODO: Disable when no active filters
+            disabled={activeFiltersCount === 0}
           >
-            Clear Filters
-            {/* TODO: Show count of active filters */}
+            Clear Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}
           </button>
         </div>
       </div>

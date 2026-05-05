@@ -14,6 +14,10 @@ export const SET_LOADING = 'SET_LOADING';
 export const SET_ERROR = 'SET_ERROR';
 export const CLEAR_ERROR = 'CLEAR_ERROR';
 
+export const FETCH_PROJECT_USERS_REQUEST = 'FETCH_PROJECT_USERS_REQUEST';
+export const FETCH_PROJECT_USERS_SUCCESS = 'FETCH_PROJECT_USERS_SUCCESS';
+export const FETCH_PROJECT_USERS_FAILURE = 'FETCH_PROJECT_USERS_FAILURE';
+
 // TODO: Implement action creators for UI state
 // Requirements:
 // 1. Task form management (open/close, mode)

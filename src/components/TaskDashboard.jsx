@@ -1,7 +1,7 @@
 // Main Dashboard Component
 // TODO: Implement the main container component
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import TaskForm from './TaskForm';
 import TaskList from './TaskList';
