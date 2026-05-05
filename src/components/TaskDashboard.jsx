@@ -8,59 +8,78 @@ import TaskList from './TaskList';
 import FilterBar from './FilterBar';
 
 // TODO: Import selectors and actions
-// import { 
-//   selectAllTasks,
-//   selectFilteredTasks,
-//   selectTaskFormState,
-//   selectUsers,
-//   selectProjects,
-//   selectFilters,
-//   selectLoading,
-//   selectErrors
-// } from '../store/selectors';
+import { 
+  selectFilteredTasks,
+  selectTaskFormState,
+  selectUsers,
+  selectProjects,
+  selectFilters,
+  selectLoading,
+  selectErrors
+} from '../store/selectors';
 
-// import {
-//   fetchTasksRequest,
-//   createTaskRequest,
-//   updateTaskRequest,
-//   deleteTaskRequest,
-//   openTaskForm,
-//   closeTaskForm,
-//   setFilters
-// } from '../store/actions';
+import {
+  fetchTasksRequest,
+  createTaskRequest,
+  updateTaskRequest,
+  deleteTaskRequest
+} from '../store/actions/taskActions';
+
+import {
+  openTaskForm,
+  closeTaskForm,
+  setFilters
+} from '../store/actions/uiActions';
 
 const TaskDashboard = () => {
   const dispatch = useDispatch();
 
-  // TODO: Connect to Redux state using useSelector
-  
-  // TODO: Fetch initial data on component mount
-  
-  // TODO: Refetch tasks when filters change
+  const tasks = useSelector(selectFilteredTasks);
+  const users = useSelector(selectUsers);
+  const projects = useSelector(selectProjects);
+  const taskForm = useSelector(selectTaskFormState);
+  const filters = useSelector(selectFilters);
+  const loading = useSelector(selectLoading);
+  const errors = useSelector(selectErrors);
 
-  // TODO: Implement event handlers
+  useEffect(() => {
+    dispatch({ type: 'FETCH_INITIAL_DATA_REQUEST' });
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchTasksRequest(filters));
+    }, [dispatch, filters.projectId, filters.assigneeId, filters.status, filters.taskType]);
+
   const handleCreateTask = () => {
-    // TODO: Dispatch open form action for create mode
+     dispatch(openTaskForm('create'));
   };
 
   const handleEditTask = (taskId) => {
-    // TODO: Dispatch open form action for edit mode
+    const taskToEdit = tasks.find(t => t.id === taskId);
+    dispatch(openTaskForm('edit', taskToEdit));
   };
 
   const handleDeleteTask = (taskId) => {
-    // TODO: Show confirmation and dispatch delete action
+    if (window.confirm("Are you sure you want to delete this task?")) {
+      dispatch(deleteTaskRequest(taskId));
+    }
   };
 
   const handleFormSubmit = (formData) => {
-    // TODO: Dispatch create or update action based on form mode
+    if (taskForm.mode === 'create') {
+      dispatch(createTaskRequest(formData));
+    } else {
+      dispatch(updateTaskRequest(formData));
+    }
   };
 
   const handleFormClose = () => {
-    // TODO: Dispatch close form action and clear localStorage
+    dispatch(closeTaskForm());
+    localStorage.removeItem('taskFormAutoSave');
   };
 
   const handleFiltersChange = (newFilters) => {
-    // TODO: Dispatch filter change action
+    dispatch(setFilters(newFilters));
   };
 
   return (
@@ -74,35 +93,35 @@ const TaskDashboard = () => {
           + Create Task
         </button>
       </header>
-
-      {/* TODO: Show error messages */}
-      {/* {errors.tasks && (
+      
+ {/* TODO: Show error messages */}
+      {(errors.tasks || errors.users || errors.projects || errors.form) && (
         <div className="error-banner">
-          Error: {errors.tasks}
+          Error: {errors.tasks || errors.users || errors.projects || errors.form}
         </div>
-      )} */}
+      )}
 
       <FilterBar
-        // filters={filters}
-        // projects={projects}
-        // users={users}
+        filters={filters}
+        projects={projects}
+        users={users}
         onFiltersChange={handleFiltersChange}
       />
 
       <TaskList
-        // tasks={tasks}
-        // loading={loading.tasks}
+        tasks={tasks}
+        loading={loading.tasks}
         onEditTask={handleEditTask}
         onDeleteTask={handleDeleteTask}
       />
 
       <TaskForm
-        // isOpen={taskForm.isOpen}
-        // mode={taskForm.mode}
-        // initialData={taskForm.taskId ? tasks.find(t => t.id === taskForm.taskId) : null}
-        // users={users}
-        // projects={projects}
-        // loading={loading.tasks}
+        isOpen={taskForm.isOpen}
+        mode={taskForm.mode}
+        initialData={taskForm.taskId ? tasks.find(t => t.id === taskForm.taskId) : null}
+        users={users}
+        projects={projects}
+        loading={loading.tasks}
         onSubmit={handleFormSubmit}
         onClose={handleFormClose}
       />

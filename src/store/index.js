@@ -25,6 +25,13 @@ import { createLogger } from 'redux-logger';
 const rootReducer = combineReducers({
   // TODO: Add your reducers here
   // TODO: Use normalized state structure (entities, ui)
+  entities: combineReducers({
+    tasks: tasksReducer,
+    users: usersReducer,
+    projects: projectsReducer
+  }),
+  ui: uiReducer,
+  optimistic: optimisticReducer
 });
 
 const sagaMiddleware = createSagaMiddleware();
@@ -64,7 +71,7 @@ const store = createStore(
 );
 
 // TODO: Run root saga
-// sagaMiddleware.run(rootSaga);
+sagaMiddleware.run(rootSaga);
 
 export default store;
 
